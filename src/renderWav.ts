@@ -26,15 +26,14 @@ function seededNoise(index: number): number {
   return ((x >>> 0) / 0xffffffff) * 2 - 1;
 }
 
-function sampleNote(note: NoteEvent, track: Track, sampleTime: number, beatSeconds: number, sampleIndex: number): number {
-  const start = note.start * beatSeconds;
+function sampleNote(note: NoteEvent, track: Track, local: number, sampleIndex: number, beatSeconds: number): number {
   const dur = note.duration * beatSeconds;
-  const local = sampleTime - start;
-  if (local < 0 || local >= dur) return 0;
   const amplitude = (note.velocity / 127) * env(local, dur);
   if (track.role === "drums") {
     const decay = Math.exp(-local * (note.midi === 36 ? 18 : 35));
-    if (note.midi === 36) return (Math.sin(2 * Math.PI * (70 - local * 35) * local) * 0.8 + seededNoise(sampleIndex) * 0.2) * decay * amplitude;
+    if (note.midi === 36) {
+      return (Math.sin(2 * Math.PI * (70 - local * 35) * local) * 0.8 + seededNoise(sampleIndex) * 0.2) * decay * amplitude;
+    }
     return seededNoise(sampleIndex) * decay * amplitude;
   }
   return osc(track.instrument, local * midiHz(note.midi)) * amplitude;
@@ -48,21 +47,27 @@ export function renderWav(score: ChiptuneScore): Uint8Array {
   const beatSeconds = 60 / score.music.bpm;
   const duration = score.music.bars * 4 * beatSeconds;
   const frames = Math.ceil(duration * SAMPLE_RATE);
+  const mix = new Float32Array(frames);
   const samples = new Int16Array(frames);
   const gains: Record<string, number> = { lead: 0.18, counter: 0.11, arp: 0.08, bass: 0.16, drums: 0.18, texture: 0.07 };
 
-  for (let i = 0; i < frames; i++) {
-    const t = i / SAMPLE_RATE;
-    let mixed = 0;
-    for (const track of score.tracks) {
-      const gain = gains[track.role] ?? 0.1;
-      for (const note of track.notes) {
-        const start = note.start * beatSeconds;
-        const end = (note.start + note.duration) * beatSeconds;
-        if (t >= start && t < end) mixed += sampleNote(note, track, t, beatSeconds, i) * gain;
+  // Render note-by-note instead of scanning every note for every sample.
+  // Complexity is proportional to audible note duration rather than samples × note count.
+  for (const track of score.tracks) {
+    const gain = gains[track.role] ?? 0.1;
+    for (const note of track.notes) {
+      const startSample = Math.max(0, Math.floor(note.start * beatSeconds * SAMPLE_RATE));
+      const noteFrames = Math.max(1, Math.ceil(note.duration * beatSeconds * SAMPLE_RATE));
+      const endSample = Math.min(frames, startSample + noteFrames);
+      for (let i = startSample; i < endSample; i++) {
+        const local = (i - startSample) / SAMPLE_RATE;
+        mix[i] += sampleNote(note, track, local, i, beatSeconds) * gain;
       }
     }
-    const limited = Math.tanh(mixed * 1.25);
+  }
+
+  for (let i = 0; i < frames; i++) {
+    const limited = Math.tanh(mix[i]! * 1.25);
     samples[i] = Math.round(limited * 32767);
   }
 
