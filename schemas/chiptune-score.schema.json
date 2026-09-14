@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ChiptuneScore v0.1",
+  "type": "object",
+  "required": ["version", "meta", "music", "intent", "style", "form", "harmony", "motifs", "tracks", "loop"],
+  "properties": {
+    "version": { "const": "0.1" },
+    "meta": {
+      "type": "object",
+      "required": ["title", "seed"],
+      "properties": {
+        "title": { "type": "string" },
+        "seed": { "type": "integer" }
+      }
+    },
+    "music": {
+      "type": "object",
+      "required": ["bpm", "key", "mode", "meter", "bars"],
+      "properties": {
+        "bpm": { "type": "number", "minimum": 50, "maximum": 240 },
+        "key": { "type": "string" },
+        "mode": { "enum": ["major", "minor", "dorian", "mixolydian"] },
+        "meter": { "const": [4, 4] },
+        "bars": { "enum": [16, 32] }
+      }
+    },
+    "tracks": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["id", "role", "instrument", "notes"],
+        "properties": {
+          "id": { "type": "string" },
+          "role": { "enum": ["lead", "counter", "arp", "bass", "drums", "texture"] },
+          "instrument": { "type": "string" },
+          "notes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["start", "duration", "midi", "velocity"],
+              "properties": {
+                "start": { "type": "number", "minimum": 0 },
+                "duration": { "type": "number", "exclusiveMinimum": 0 },
+                "midi": { "type": "integer", "minimum": 0, "maximum": 127 },
+                "velocity": { "type": "integer", "minimum": 1, "maximum": 127 }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

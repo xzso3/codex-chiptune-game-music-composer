@@ -1,0 +1,9 @@
+{
+  "lock": ["motif.main", "track.lead"],
+  "arpDensity": 0.35,
+  "drumStrength": 0.9,
+  "sectionTension": {
+    "B": 0.9,
+    "B2": 1.0
+  }
+}

@@ -1,0 +1,21 @@
+[
+  {"id":"exploration-core","brief":{"gameRole":"exploration","mood":["curious","open"],"stylePack":"chip-core","durationBars":32}},
+  {"id":"exploration-rock","brief":{"gameRole":"exploration","mood":["driving","adventurous"],"stylePack":"chip-rock","durationBars":32}},
+  {"id":"exploration-electro","brief":{"gameRole":"exploration","mood":["kinetic","futuristic"],"stylePack":"chip-electro","durationBars":32}},
+  {"id":"exploration-ambient","brief":{"gameRole":"exploration","mood":["lonely","mysterious"],"stylePack":"chip-ambient","durationBars":32}},
+
+  {"id":"town-core","brief":{"gameRole":"town","mood":["friendly","memorable"],"stylePack":"chip-core","durationBars":16}},
+  {"id":"town-rock","brief":{"gameRole":"town","mood":["lively","rebellious"],"stylePack":"chip-rock","durationBars":16}},
+  {"id":"town-electro","brief":{"gameRole":"town","mood":["bright","technological"],"stylePack":"chip-electro","durationBars":16}},
+  {"id":"town-ambient","brief":{"gameRole":"town","mood":["quiet","warm"],"stylePack":"chip-ambient","durationBars":16}},
+
+  {"id":"battle-core","brief":{"gameRole":"battle","mood":["urgent","heroic"],"stylePack":"chip-core","durationBars":16}},
+  {"id":"battle-rock","brief":{"gameRole":"battle","mood":["aggressive","heroic"],"stylePack":"chip-rock","durationBars":16}},
+  {"id":"battle-electro","brief":{"gameRole":"battle","mood":["fast","mechanical"],"stylePack":"chip-electro","durationBars":16}},
+  {"id":"battle-ambient","brief":{"gameRole":"battle","mood":["tense","restrained"],"stylePack":"chip-ambient","durationBars":16}},
+
+  {"id":"boss-core","brief":{"gameRole":"boss","mood":["dramatic","dangerous"],"stylePack":"chip-core","durationBars":32}},
+  {"id":"boss-rock","brief":{"gameRole":"boss","mood":["tense","heroic","fast"],"stylePack":"chip-rock","durationBars":32}},
+  {"id":"boss-electro","brief":{"gameRole":"boss","mood":["relentless","cybernetic"],"stylePack":"chip-electro","durationBars":32}},
+  {"id":"boss-ambient","brief":{"gameRole":"boss","mood":["ominous","vast"],"stylePack":"chip-ambient","durationBars":32}}
+]

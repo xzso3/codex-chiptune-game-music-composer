@@ -1,0 +1,10 @@
+{
+  "title": "pixel-boss-rock",
+  "gameRole": "boss",
+  "mood": ["tense", "heroic", "fast"],
+  "stylePack": "chip-rock",
+  "durationBars": 32,
+  "seed": 42731,
+  "chiptuneStrength": 0.85,
+  "modernStrength": 0.5
+}

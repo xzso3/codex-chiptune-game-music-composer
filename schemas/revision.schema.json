@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RevisionRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "lock": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "arpDensity": { "type": "number", "minimum": 0, "maximum": 1 },
+    "drumStrength": { "type": "number", "minimum": 0, "maximum": 1 },
+    "sectionTension": {
+      "type": "object",
+      "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+    }
+  }
+}
