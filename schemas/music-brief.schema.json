@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/xzso3/codex-chiptune-game-music-composer/schemas/music-brief.schema.json",
+  "title": "MusicBrief",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["gameRole", "mood", "stylePack"],
+  "properties": {
+    "title": { "type": "string", "minLength": 1 },
+    "gameRole": { "enum": ["exploration", "town", "battle", "boss"] },
+    "mood": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+    "stylePack": { "enum": ["chip-core", "chip-rock", "chip-electro", "chip-ambient"] },
+    "durationBars": { "enum": [16, 32] },
+    "bpm": { "type": "integer", "minimum": 50, "maximum": 240 },
+    "key": { "enum": ["C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G", "G#", "Ab", "A", "A#", "Bb", "B"] },
+    "mode": { "enum": ["major", "minor", "dorian", "mixolydian"] },
+    "seed": { "type": "integer", "minimum": 1, "maximum": 4294967295 },
+    "chiptuneStrength": { "type": "number", "minimum": 0, "maximum": 1 },
+    "modernStrength": { "type": "number", "minimum": 0, "maximum": 1 }
+  }
+}
