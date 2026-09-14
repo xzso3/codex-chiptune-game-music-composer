@@ -6,6 +6,7 @@
   "engines": { "node": ">=20" },
   "scripts": {
     "compose": "tsx cli/compose.ts",
+    "revise": "tsx cli/revise.ts",
     "validate": "tsx cli/validate.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
