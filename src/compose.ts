@@ -87,15 +87,19 @@ function renderLead(motif: Motif, bars: number, key: string, mode: Mode, rng: Se
   return events;
 }
 
-function renderCounter(lead: NoteEvent[], key: string, mode: Mode): NoteEvent[] {
+function renderCounter(lead: NoteEvent[], key: string, mode: Mode, totalBeats: number): NoteEvent[] {
   return lead
     .filter((_, i) => i % 4 === 1)
-    .map((note, i) => ({
-      start: note.start + (i % 2 ? 0.5 : 1),
-      duration: Math.max(0.25, note.duration * 0.75),
-      midi: degreeToMidi(key, mode, i % 2 ? 5 : 3, 4),
-      velocity: 68,
-    }));
+    .map((note, i) => {
+      const start = note.start + (i % 2 ? 0.5 : 1);
+      return {
+        start,
+        duration: Math.max(0, Math.min(Math.max(0.25, note.duration * 0.75), totalBeats - start)),
+        midi: degreeToMidi(key, mode, i % 2 ? 5 : 3, 4),
+        velocity: 68,
+      };
+    })
+    .filter((note) => note.start < totalBeats && note.duration > 0);
 }
 
 function renderArp(bars: number, progression: number[], key: string, mode: Mode, density: number): NoteEvent[] {
@@ -176,6 +180,7 @@ export function compose(brief: MusicBrief): ChiptuneScore {
   const bpm = brief.bpm ?? rng.int(style.bpmRange[0], style.bpmRange[1]);
   const progression = [...rng.pick(PROGRESSIONS[brief.gameRole]!)];
   const motif = makeMotif(rng, style.melodicDensity);
+  const totalBeats = bars * 4;
 
   const lead = renderLead(motif, bars, key, mode, rng, style.melodicDensity);
   const tracks: Track[] = [
@@ -185,7 +190,7 @@ export function compose(brief: MusicBrief): ChiptuneScore {
   ];
 
   if (style.preferredRoles.includes("counter")) tracks.push({
-    id: "track.counter", role: "counter", instrument: ROLE_INSTRUMENT.counter!, notes: renderCounter(lead, key, mode),
+    id: "track.counter", role: "counter", instrument: ROLE_INSTRUMENT.counter!, notes: renderCounter(lead, key, mode, totalBeats),
   });
   if (style.preferredRoles.includes("drums")) tracks.push({
     id: "track.drums", role: "drums", instrument: ROLE_INSTRUMENT.drums!, notes: renderDrums(bars, style.rhythmicDrive, style.id === "chip-electro"),
